@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 
     [Header("Jump")]
     public float jumpForce = 5f;
-    public int maxJumps = 2;
+    private int maxJumps = 2;
     private int jumpCount = 0;
     private bool isGrounded = false;
 
@@ -26,14 +26,14 @@ public class Player : MonoBehaviour
 
     public void Jump()
     {
-        if (isGrounded || jumpCount < maxJumps)
+        if (isGrounded && jumpCount < maxJumps)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-
-            if (!isGrounded)
-            {
-                jumpCount++;
-            }
+            jumpCount++;
+        }
+        if(jumpCount == maxJumps)
+        {
+            isGrounded = false;
         }
     }
 
@@ -41,6 +41,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
+            Debug.Log($"{GetType().Name} collided with ground");
             isGrounded = true;
             jumpCount = 0;
         }
